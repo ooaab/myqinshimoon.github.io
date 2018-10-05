@@ -1,62 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
 <head>
-<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,user-scalable=no"  servergenerated="true" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta content="telephone=no" name="format-detection" />
+    <meta charset="UTF-8">
+    <title>修改网页的默认alert弹窗</title>
+    <script type="text/javascript" src="js/CommonDialog.js">
+    </script>
 </head>
-<body></body>
-</html>
-<script>
-//改写alert
-window.alert = function(txt)
-{
+<body>
+<button onclick="showConfirmDialog('我的对话框','退出登录')">确认对话框</button><br>
+<button onclick="showOKDialog('提交成功','img/ok.svg')">提交成功的对话框</button><br>
+<button onclick="showWaringDialog('请求超时','img/warning.svg')">警告的对话框</button><br>
+        <script>
+       
+function setAleartStyle() {
     var shield = document.createElement("DIV");
     shield.id = "shield";
     shield.style.position = "absolute";
-    shield.style.left = "0px";
-    shield.style.top = "0px";
-    shield.style.width = "100%";
-    shield.style.height = "100%";
-    shield.style.background = "#333";
-    shield.style.textAlign = "center";
-    shield.style.zIndex = "19901000";
-    shield.style.filter = "alpha(opacity=.5)";
-    shield.style.opacity = ".5";
+    shield.style.left = "50%";
+    shield.style.top = "50%";
+    shield.style.width = "280px";
+    shield.style.height = "150px";
+    shield.style.marginLeft = "-140px";
+    shield.style.marginTop = "-110px";
+    shield.style.zIndex = "25";
     var alertFram = document.createElement("DIV");
-    alertFram.id="alertFram";
+    alertFram.id = "alertFram";
     alertFram.style.position = "absolute";
-    alertFram.style.left = "25%";
-    alertFram.style.top = "35%";
-    alertFram.style.width = "50%";
-    alertFram.style.background = "#ccc";
-    alertFram.style.overflow = "hidden";
-    alertFram.style.textAlign = "center";
-    alertFram.style.borderRadius = "5px";
-    alertFram.style.zIndex = "19901024";
-    strHtml = "<ul style=\"list-style:none;margin:0px;padding:0px;width:100%\">\n";
-    strHtml += " <li style=\"background:#FFFFFF;font-size:16px;text-align:center;height:30px;line-height:30px;border-bottom: 1px solid #EBEBEB;\">提 示</li>\n";
-    strHtml += " <li style=\"padding:20px;background:#fff;text-align:center;font-size:12px;border-bottom: 1px solid #EBEBEB;\">"+txt+"</li>\n";
-    strHtml += " <li style=\"background:#FFFFFF;text-align:center;font-size:14px;height:30px;line-height:30px;\"><span onclick=\"doOk()\" style=\"width: 50%;cursor: pointer;\">确 定</span></li>\n";
+    alertFram.style.width = "280px";
+    alertFram.style.height = "150px";
+    alertFram.style.left = "50%";
+    alertFram.style.top = "50%";
+    alertFram.style.marginLeft = "-140px";
+    alertFram.style.marginTop = "-110px";
+    alertFram.style.textAlign = "left";
+    alertFram.style.lineHeight = "150px";
+    alertFram.style.zIndex = "300";
+    alertFram.style.borderRadius = "4px";
+    return {shield: shield, alertFram: alertFram};
+}
+/**
+ * @param infomation 提示信息
+ * @param imgUrl 提示图标路径
+ */
+function commonDialog(infomation,imgUrl) {
+    var __ret = setAleartStyle();
+    var shield = __ret.shield;
+    var alertFram = __ret.alertFram;
+    strHtml = "<ul style=\"list-style:none;margin:0px;padding:0px;width:100%; \">\n";
+    strHtml += " <li style=\"background:#345;text-align:center;font-size:20px;height:95px;line-height:95px;border:1px solid #F9CADE;border-radius :6px 6px 6px 6px;color:#ffffff\"><img src='"+imgUrl+"' align='center' style=\"width:60px; height:60px;margin-right: 16px;\">"+infomation+"</li>\n";
     strHtml += "</ul>\n";
     alertFram.innerHTML = strHtml;
     document.body.appendChild(alertFram);
     document.body.appendChild(shield);
-    var c = 0;
-    this.doAlpha = function(){
-        if (c++ > 20){clearInterval(ad);return 0;}
-        shield.style.filter = "alpha(opacity="+c+")";
-        shield.style.opacity = ".5";
-    }
-    var ad = setInterval("doAlpha()",5);
+    document.body.onselectstart = function(){return false;};
+    alertFram.focus();
+    setInterval(function () {
+        alertFram.style.display = "none";
+        shield.style.display = "none";
+    },3000);
+}
+/**
+ * 确认对话框
+ * @param title
+ * @param infomation
+ */
+function showConfirmDialog(title,infomation)
+{
+    var __ret = setAleartStyle();
+    var shield = __ret.shield;
+    var alertFram = __ret.alertFram;
+    strHtml = "<ul style=\"list-style:none;margin:0px;padding:0px;width:100%\">\n";
+    strHtml += " <li style=\"background:#334455;text-align:left;padding-left:20px;font-size:14px;font-weight:bold;height:30px;line-height:30px;border:1px solid #F9CADE;border-radius :6px 6px 0px 0px;color:white\">"+title+"</li>\n";
+    strHtml += " <li style=\"background:#334455;text-align:center;font-size:12px;height:95px;line-height:95px;border-left:1px solid #F9CADE;border-right:1px solid #F9CADE;color:#ffffff\">"+infomation+"</li>\n";
+    strHtml += " <li style=\"background:#334455;text-align:center;font-weight:bold;height:30px;padding:5px;line-height:25px;border-radius :0px 0px 6px 6px; border:1px solid #F9CADE;\"><input type=\"button\" value=\"确 定\" onclick=\"doOk()\" style=\"width:80px;background:#334455;color:white;border:1px solid white;border-radius:4px;cursor:pointer;cufont-size:14px;line-height:25px;outline:none;margin-top: 2px\"/></li>\n";
+    strHtml += "</ul>\n";
+    alertFram.innerHTML = strHtml;
+    document.body.appendChild(alertFram);
+    document.body.appendChild(shield);
     this.doOk = function(){
-        //alertFram.style.display = "none";
-        //shield.style.display = "none";
-　　　　 document.body.removeChild(alertFram);
-        document.body.removeChild(shield);
+        alertFram.style.display = "none";
+        shield.style.display = "none";
     }
     alertFram.focus();
     document.body.onselectstart = function(){return false;};
+
 }
-alert(1);alert(2);
-</script>
+
+/**
+ * 提交或者请求成功
+ * @param infomation 提示信息
+ * @param imgUrl 提示图标路径
+ */
+function showOKDialog(infomation,imgUrl)
+{
+    commonDialog(infomation,imgUrl);
+}
+
+/**
+ * 提交或者请求成功
+ * @param infomation 提示信息
+ * @param imgUrl 提示图标路径
+ */
+function showWaringDialog(infomation,imgUrl)
+{
+    commonDialog(infomation,imgUrl);
+}
+        </script>
+</body>
+</html>
+
